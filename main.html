@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RK Video player</title>
+    <link rel="stylesheet" href="css/main.css" />
+</head>
+<body>
+    <div class="videoplayer">
+        <div class="videoPlayer_bgimage">
+            
+        </div>
+    </div>
+    <script>
+        const { ipcRenderer} = require('electron');
+        function CreateingVideoTag(arg){
+            var video = document.createElement('video');
+            video.setAttribute('height','100%');
+            video.setAttribute('width','100%');
+            video.setAttribute("controls","true");
+            video.setAttribute("class","videoTag");
+            var source = document.createElement('source');
+            source.setAttribute('src', arg.filePaths);
+
+            video.appendChild(source);
+            var videoplayer = document.querySelector('.videoplayer');
+            videoplayer.append(video);
+            video.play();
+        }
+        ipcRenderer.on('file_path',(event,arg)=>{
+            console.log(arg.filePaths);
+            if(document.querySelector('.videoTag')){
+                document.querySelector('.videoTag').remove();
+                CreateingVideoTag(arg);
+            }
+            else{
+                CreateingVideoTag(arg);
+            }
+            
+        })
+        ipcRenderer.on('playorStopMessage',(event,arg)=>{
+            if(arg=="play"){
+                let video= document.querySelector('.videoTag');
+                video.play();
+            }
+            if(arg=="stop"){
+                let video= document.querySelector('.videoTag');
+                video.pause();
+            }
+        })
+    </script>
+</body>
+</html>

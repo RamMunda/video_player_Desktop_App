@@ -1,0 +1,15 @@
+{
+  "name": "video_player",
+  "version": "1.0.0",
+  "description": "video player to play any typs of videos",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "electron": "^11.2.3"
+  }
+}

@@ -1,0 +1,25 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+  font-family: sans-serif;
+  font-display: swap;
+  background-color: blueviolet;
+  color: white;
+}
+.videoPlayer_bgimage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: -1;
+  background-image: url("https://img.freepik.com/free-photo/abstract-blue-extruded-voronoi-blocks-background-minimal-light-clean-corporate-wall-3d-geometric-surface-illustration-polygonal-elements-displacement_1217-2510.jpg?size=626&ext=jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
