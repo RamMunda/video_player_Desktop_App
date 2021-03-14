@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add url</title>
+</head>
+<body>
+    <div class="addsubtitle">
+        <input type="url" id="urlpath" style="outline: none;" placeholder="Enter the url of subtitle......"/>
+        <button id="submitbutton">
+            Submit
+        </button>
+    </div>
+    <script>
+        const {ipcRenderer} = require('electron');
+
+        document.getElementById('submitbutton').addEventListener('click',function(){
+            const subtitlePathUrl = document.getElementById('urlpath').value;
+            ipcRenderer.send('subtitlePathUrl',subtitlePathUrl);
+
+        })
+
+    </script>
+</body>
+</html>

@@ -2,6 +2,9 @@
   margin: 0;
   padding: 0;
 }
+body {
+  background-color: white;
+}
 .container {
   display: flex;
   justify-content: center;
@@ -22,4 +25,92 @@
   background-image: url("https://img.freepik.com/free-photo/abstract-blue-extruded-voronoi-blocks-background-minimal-light-clean-corporate-wall-3d-geometric-surface-illustration-polygonal-elements-displacement_1217-2510.jpg?size=626&ext=jpg");
   background-repeat: no-repeat;
   background-size: cover;
+}
+.videocontroller_container {
+  box-sizing: border-box;
+  display: flex;
+  height: 20%;
+  width: 100%;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+.videocontroller {
+  height: 10px;
+  border-radius: 5px;
+  background-color: blueviolet;
+}
+.playButtonContainer {
+  box-sizing: border-box;
+  display: inline-block;
+  margin: 10px;
+}
+.playbutton {
+  background-color: transparent;
+  border: none;
+  width: 20px;
+  height: 20px;
+  outline: none;
+  margin: 0px 20px;
+}
+.fullScreenController {
+  font-size: 20px;
+  margin: 0px 20px;
+}
+.fullScreenController > i {
+  cursor: pointer;
+  color: blueviolet;
+}
+.controller_container {
+  display: inline-block;
+  width: 90%;
+  border: 0.5px solid blueviolet;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.playbutton > i {
+  font-size: 25px;
+  color: blueviolet;
+}
+.playbutton:hover {
+  cursor: pointer;
+}
+.timeContainer {
+  margin: 0px 10px;
+  color: blueviolet;
+}
+.volumeicon {
+  margin: 0px 10px;
+}
+.volumeicon > i {
+  font-size: 20px;
+  color: blueviolet;
+}
+input[type="range"] {
+  color: yellow;
+  background-color: black;
+}
+.videotrack {
+  width: 100%;
+  height: 90px;
+  color: black;
+}
+.video_Container {
+  /* opacity: 0;
+  visibility: hidden; */
+  width: 100%;
+  position: absolute;
+  bottom: 0%;
+  z-index: 0;
+  display: flex;
+  align-items: center;
+}
+.videoTag {
+  object-fit: cover;
+  object-position: center;
+}
+.Displaypropofcontroller {
+  opacity: 1;
+  visibility: visible;
+  /* transform: translateY(-10px); */
 }

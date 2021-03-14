@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RK Video player</title>
     <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+
 </head>
 <body>
     <div class="videoplayer">
@@ -15,24 +17,129 @@
     </div>
     <script>
         const { ipcRenderer} = require('electron');
+        const eventFire = (el, etype) => {
+            var evt = document.createEvent("MouseEvents");
+            evt.initMouseEvent(etype, true, true, window,0, 0, 0, 0, 0, false, false, false, false, 0, null);
+            el.dispatchEvent(evt);
+        }
         function CreateingVideoTag(arg){
+            var videoSubtileContaier = document.querySelector('.videoPlayer_bgimage');
             var video = document.createElement('video');
+            var videoplayer = document.querySelector('.videoplayer');
+            var video_Container = document.createElement('div'); 
+            video_Container.setAttribute('class','video_Container');
+           
+            var playButtonContainer = document.createElement('div');
+            playButtonContainer.setAttribute('class','playButtonContainer');
+
+            var p_button = document.createElement('button');
+            p_button.setAttribute('class','playbutton');
+            p_button.innerHTML = '<i class="fas fa-pause"></i>';
+            playButtonContainer.append(p_button);
+
+
+
+            var videocontroller_container = document.createElement('div');
+            videocontroller_container.setAttribute('class','videocontroller_container');
+
+            var controller_container = document.createElement('div');
+            controller_container.setAttribute('class','controller_container');
+
+            var videocontroller = document.createElement('div');
+            videocontroller.setAttribute('class','videocontroller');
+
+            controller_container.append(videocontroller); 
+
+            var fullScreenController = document.createElement('div');
+            fullScreenController.setAttribute("class","fullScreenController");
+            fullScreenController.innerHTML = '<i class="fas fa-compress"></i>';
+
+            var timeContainer = document.createElement('div');
+            timeContainer.setAttribute('class','timeContainer');
+
+            var volumeicon = document.createElement('div');
+            volumeicon.setAttribute('class','volumeicon');
+            volumeicon.innerHTML = '<i class="fas fa-volume-up"></i>';
+
+            var volumeController = document.createElement('input');
+            volumeController.setAttribute('class','volumeController');
+            volumeController.setAttribute('type','range');
+            volumeController.setAttribute('min','0');
+            volumeController.setAttribute('max','100');
+
+            // video subtitle track tag 
+            var videotrack = document.createElement('track');
+            videotrack.setAttribute('class','videotrack');
+            videotrack.setAttribute('label','English');
+            videotrack.setAttribute('kind','subtitles');
+            videotrack.setAttribute('srclang','en');
+            videotrack.setAttribute('mode','showing');
+            videotrack.setAttribute('src','');
+                      
+            videocontroller_container.append(videotrack);
+            videocontroller_container.append(playButtonContainer);
+            videocontroller_container.append(controller_container);
+            videocontroller_container.append(timeContainer);
+            videocontroller_container.append(volumeicon);
+            videocontroller_container.append(volumeController);
+            videocontroller_container.append(fullScreenController);
+
+
+            video_Container.append(videocontroller_container);
+
             video.setAttribute('height','100%');
             video.setAttribute('width','100%');
-            video.setAttribute("controls","true");
+            // video.setAttribute("controls","true");
+
             video.setAttribute("class","videoTag");
             var source = document.createElement('source');
             source.setAttribute('src', arg.filePaths);
 
             video.appendChild(source);
-            var videoplayer = document.querySelector('.videoplayer');
-            videoplayer.append(video);
+            video.append(videotrack);
+            videoSubtileContaier.append(video);
+            videoSubtileContaier.append(video_Container);
+            p_button.addEventListener('click',function(){
+
+                if(video.paused){
+                    p_button.innerHTML = '<i class="fas fa-pause"></i>'
+                    video.play();
+                }
+                else{
+                    p_button.innerHTML = '<i class="fas fa-play"></i>';
+                    video.pause();
+                }
+            })
+            fullScreenController.addEventListener('click',function(){
+                video.webkitEnterFullscreen();
+            })
+            controller_container.addEventListener('click',function(e){                
+                video.currentTime = ((e.offsetX/controller_container.offsetWidth)*video.duration);
+            })
+
+            volumeController.addEventListener("change",function(e){
+              video.volume = volumeController.value/100;
+            })
+            document.querySelector('.videoTag').addEventListener('mousemove',function(){
+                video_Container.classList.toggle('Displaypropofcontroller');   
+            })
+            video.currentTime = 8000000000;
+            setTimeout(()=>{
+                eventFire(document.querySelector('.playbutton'),'click');
+            },2000)
             video.play();
+            setInterval(()=>{
+                var k = (video.currentTime/video.duration)*100;
+                videocontroller.style.width = k+'%';
+                timeContainer.textContent = '-'+ ((video.duration)/60-(video.currentTime)/60).toFixed(2);
+            },1000)
+            // video.currentTime = 0;
+
         }
         ipcRenderer.on('file_path',(event,arg)=>{
-            console.log(arg.filePaths);
             if(document.querySelector('.videoTag')){
                 document.querySelector('.videoTag').remove();
+                document.querySelector('.videocontroller_container').remove();
                 CreateingVideoTag(arg);
             }
             else{
@@ -48,6 +155,20 @@
             if(arg=="stop"){
                 let video= document.querySelector('.videoTag');
                 video.pause();
+            }
+        })
+        ipcRenderer.on('subtitle_file_path',(event,arg)=>{
+            if(document.querySelector('.videoTag')){
+                var videotag = document.querySelector('.videoTag');
+                document.querySelector('.videotrack').src = arg.filePaths; 
+                videotag.textTracks[0].mode = "showing";
+            }
+        })
+        ipcRenderer.on('sendsubtitlePathUrl',(event,arg)=>{
+            if(document.querySelector('.videoTag')){
+                var videotag = document.querySelector('.videoTag');
+                document.querySelector('.videotrack').src = arg; 
+                videotag.textTracks[0].mode = "showing";
             }
         })
     </script>
